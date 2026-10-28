@@ -2,48 +2,129 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { profile } from '../profile';
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
 ---
-
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head><BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} /></head>
+  <body>
+    <Header />
+    <main id="main-content" class="homepage">
+      <section class="intro" aria-labelledby="intro-title">
+        <div class="intro-copy">
+          <p class="eyebrow">PERSONAL HOMEPAGE</p>
+          <h1 id="intro-title">{profile.name}<span class="chinese-name" lang="zh-CN">{profile.chineseName}</span></h1>
+          <p class="role">{profile.role} <span aria-hidden="true">/</span> <span lang="zh-CN">硕士研究生</span></p>
+          <p class="intro-text">I am a master's student in {profile.program} at {profile.university}, in the {profile.school}. My research interests are <strong>computer vision</strong> and <strong>image generation</strong>.</p>
+          <p class="intro-chinese" lang="zh-CN">我就读于哈尔滨工业大学（深圳）信息学部计算机科学与技术学院，电子信息专业，主要研究方向为计算机视觉与图像生成。</p>
+          <div class="intro-links">
+            <a class="button" href={`mailto:${profile.email}`}>Get in touch <span aria-hidden="true">↗</span></a>
+            <a class="text-link" href={profile.github}>GitHub <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <aside class="profile-aside" aria-label="Affiliation and contact">
+          <div class="profile-mark" aria-hidden="true"><span>{profile.initials}</span><i></i></div>
+          <p class="aside-label">BASED AT</p>
+          <p class="affiliation">Harbin Institute of Technology<span>Shenzhen</span></p>
+          <p class="school">{profile.school}</p>
+          <a class="email" href={`mailto:${profile.email}`}>{profile.email}</a>
+        </aside>
+      </section>
+      <section id="research" class="section-row" aria-labelledby="research-title">
+        <div class="section-label"><span class="section-number">01</span><h2 id="research-title">Research interests</h2></div>
+        <div class="interest-list">
+          {profile.interests.map((interest, index) => (
+            <div class="interest">
+              <span class="interest-index" aria-hidden="true">0{index + 1}</span>
+              <div><h3>{interest.name}<span lang="zh-CN">{interest.chinese}</span></h3><p>{interest.description}</p></div>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section class="section-row" aria-labelledby="notes-title">
+        <div class="section-label"><span class="section-number">02</span><h2 id="notes-title">Notes & writing</h2><a class="small-link" href="/blog/">All notes <span aria-hidden="true">↗</span></a></div>
+        <div class="notes-list">
+          {posts.map((post) => (
+            <a class="note" href={`/blog/${post.id}/`}>
+              <div><p class="note-date"><FormattedDate date={post.data.pubDate} /></p><h3 lang="zh-CN">{post.data.title}</h3><p class="note-description" lang="zh-CN">{post.data.description}</p></div>
+              <span class="note-arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
+          {posts.length === 0 && <p class="muted">Notes will appear here as I write them.</p>}
+        </div>
+      </section>
+      <section id="contact" class="section-row contact-section" aria-labelledby="contact-title">
+        <div class="section-label"><span class="section-number">03</span><h2 id="contact-title">Contact</h2></div>
+        <div><p class="contact-lead">Let's connect.</p><p class="muted">The best way to reach me is by email.</p><a class="contact-email" href={`mailto:${profile.email}`}>{profile.email} <span aria-hidden="true">↗</span></a><p class="contact-affiliation" lang="zh-CN">{profile.affiliationChinese}<br />{profile.programChinese}</p></div>
+      </section>
+    </main>
+    <Footer />
+  </body>
 </html>
+<style>
+  .homepage { width: auto; max-width: 1040px; padding: 0 32px; }
+  .intro { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 72px; padding: 78px 0 64px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .18em; color: var(--accent); margin: 0 0 22px; }
+  h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: clamp(42px, 5vw, 64px); letter-spacing: -.045em; line-height: 1.15; }
+  .chinese-name { display: inline-block; font-family: sans-serif; font-size: 24px; font-weight: 400; color: var(--muted); letter-spacing: .04em; margin-left: 20px; vertical-align: middle; }
+  .role { color: var(--accent); margin: 18px 0 23px; font-size: 15px; }
+  .role span[aria-hidden] { margin: 0 10px; opacity: .5; }
+  .intro-text { font-size: 17px; line-height: 1.85; max-width: 610px; }
+  .intro-text strong { font-weight: 400; color: var(--accent); }
+  .intro-chinese { font-size: 14px; line-height: 1.95; color: var(--muted); margin-top: 18px; }
+  .intro-links { display: flex; align-items: center; gap: 26px; margin-top: 28px; }
+  .button { background: var(--accent); color: white; padding: 10px 18px; border-radius: 5px; text-decoration: none; font-size: 14px; display: inline-flex; gap: 20px; }
+  .button:hover { background: var(--accent-dark); color: white; }
+  .text-link { font-size: 14px; text-decoration: none; }
+  .profile-aside { padding-top: 9px; }
+  .profile-mark { width: 154px; height: 154px; position: relative; background: #e8efeb; display: grid; place-items: center; border-radius: 50%; margin-bottom: 30px; color: var(--accent); border: 8px solid var(--paper); outline: 1px solid #dbe4de; }
+  .profile-mark span { font-family: Georgia, serif; font-size: 48px; letter-spacing: -.08em; padding-right: 4px; }
+  .profile-mark i { position: absolute; width: 28px; height: 28px; border: 5px solid var(--paper); border-radius: 50%; background: #658774; bottom: 0; right: 2px; }
+  .aside-label { color: var(--muted); font-size: 10px; letter-spacing: .15em; margin: 0 0 10px; }
+  .affiliation { font-size: 15px; font-weight: 700; line-height: 1.6; margin: 0 0 9px; }
+  .affiliation span { display: block; font-weight: 400; }
+  .school { color: var(--muted); font-size: 13px; margin: 0 0 15px; }
+  .email { font-size: 13px; text-underline-offset: 4px; }
+  .section-row { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 40px; padding: 38px 0 44px; border-top: 1px solid var(--line); scroll-margin-top: 26px; }
+  .section-label { padding-top: 4px; }
+  .section-number { color: var(--muted); font-size: 11px; letter-spacing: .08em; display: block; margin-bottom: 10px; }
+  h2 { font-size: 19px; font-weight: 700; line-height: 1.4; }
+  h3 { font-size: 17px; line-height: 1.5; font-weight: 700; }
+  .interest { display: flex; gap: 19px; padding: 9px 0 23px; }
+  .interest:last-child { padding-bottom: 0; }
+  .interest-index { font-size: 11px; color: var(--accent); margin-top: 5px; }
+  .interest h3 span { font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 14px; white-space: nowrap; }
+  .interest p { font-size: 14px; color: var(--muted); margin: 5px 0 0; }
+  .small-link { font-size: 13px; display: inline-block; margin-top: 12px; text-decoration: none; }
+  .note { display: flex; justify-content: space-between; gap: 25px; padding: 3px 0 15px; color: var(--ink); text-decoration: none; }
+  .note + .note { border-top: 1px solid var(--line); padding-top: 20px; }
+  .note-date { font-size: 12px; color: var(--muted); margin: 0 0 8px; }
+  .note h3 { margin: 0 0 8px; font-size: 17px; }
+  .note-description { color: var(--muted); font-size: 14px; margin: 0; }
+  .note-arrow { font-size: 23px; color: var(--accent); padding-top: 23px; }
+  .note:hover h3 { color: var(--accent); }
+  .contact-section { padding-bottom: 64px; }
+  .contact-lead { font-family: Georgia, serif; font-size: 28px; margin: 0 0 8px; color: var(--ink); }
+  .muted { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+  .contact-email { font-size: clamp(18px, 3vw, 25px); text-decoration: none; letter-spacing: -.02em; }
+  .contact-affiliation { color: var(--muted); font-size: 13px; line-height: 1.9; margin-top: 20px; }
+  @media (max-width: 780px) { .intro { gap: 36px; grid-template-columns: minmax(0, 1fr) 200px; } .section-row { grid-template-columns: 180px minmax(0, 1fr); gap: 28px; } }
+  @media (max-width: 600px) {
+    .homepage { padding: 0 22px; }
+    .intro { grid-template-columns: 1fr; padding: 44px 0 36px; gap: 28px; }
+    .chinese-name { font-size: 21px; margin-left: 16px; }
+    .intro-text { font-size: 16px; }
+    .profile-aside { border-left: 2px solid #dbe4de; padding: 0 0 0 18px; }
+    .profile-mark, .aside-label { display: none; }
+    .section-row { grid-template-columns: 1fr; gap: 20px; padding: 30px 0; }
+    .section-number { display: inline; margin-right: 10px; }
+    .section-label h2 { display: inline; }
+    .small-link { display: block; margin-top: 8px; }
+    .interest h3 span { display: block; margin-left: 0; }
+    .contact-section { padding-bottom: 42px; }
+  }
+</style>

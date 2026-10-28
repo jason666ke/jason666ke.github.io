@@ -1,68 +1,52 @@
-# Astro Starter Kit: Blog
+# Chiwei Ke · Personal Homepage
+
+A simple bilingual academic homepage built on the repository's existing Astro blog framework.
+
+- Website: https://jason666ke.github.io/
+- Author: Chiwei Ke / 柯炽炜
+- Existing Chinese blog post retained; original starter examples are preserved in `examples/starter-posts/` and are not published.
+
+## Update your information
+
+Edit **`src/profile.ts`** on GitHub and commit your changes. It contains the name, affiliation, degree program, email, GitHub link, and research interests.
+
+The short bilingual biography is in `src/pages/index.astro`. No publications or academic achievements have been added.
+
+## Add a blog post
+
+Create a Markdown file in `src/content/blog/`:
+
+```markdown
+---
+title: "Your post title"
+description: "A short description"
+pubDate: 2026-10-28
+---
+
+Your article goes here.
+```
+
+The notes list, homepage, RSS feed, and sitemap update at build time.
+
+## Local development
+
+Requires a Node.js version supported by the locked Astro version.
 
 ```sh
-npm create astro@latest -- --template blog
+npm ci
+npm run dev
+npm run build
+npm run preview
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
+## GitHub Pages
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The existing `.github/workflows/deploy.yml` builds the Astro site and deploys it after a push to `main`.
 
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+If Pages has not been enabled, open the repository's **Settings → Pages → Build and deployment → Source**, and select **GitHub Actions**.
 
-Features:
+Once the workflow succeeds, the site should be available at https://jason666ke.github.io/. Confirm it opens while logged out before using it as the OpenReview Homepage URL.
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+## Framework and license
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Built with Astro, retaining the original repository license in `LICENSE`. Local Atkinson fonts are retained from the existing starter.
